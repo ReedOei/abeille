@@ -2,13 +2,7 @@
 
 :- initialization(main, main).
 
-:- use_module(library(clpfd)).
-:- use_module(library(filesex)).
-:- use_module(library(achelois)).
 :- use_module(library(http/json)).
-:- use_module(library(http/json_convert)).
-:- use_module(library(http/http_json)).
-:- use_module(library(url)).
 
 root(Root) :-
     source_file(File),
