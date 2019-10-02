@@ -30,12 +30,15 @@ gen_structures(TopName) :-
 generate_parsers(structure(Name, Attrs), [Parser|Parsers]) :-
     maplist(key, Attrs, Keys),
     StructureFunctor =.. [Name|Keys],
+
     atomic_list_concat(['parse', Name], '_', ParserName),
     ParserFunctor =.. [ParserName, json('Json'), StructureFunctor],
+
     maplist(generate_field_parsers, Attrs, FieldParsersList, RestParsers),
     flatten(FieldParsersList, FieldParsers),
     build_body(FieldParsers, Body),
-    Parser =.. [':-', ParserFunctor, Body],
+
+    Parser = (ParserFunctor :- Body),
     flatten(RestParsers, Parsers).
 generate_parsers(listof(S), Parsers) :-
     generate_parsers(S, Parsers).
@@ -54,13 +57,14 @@ call_parser(structure(Name, _Attrs), KeyName, KeyUpper, [ParserFunctor]) :-
 call_parser(listof(S), KeyName, KeyUpper, ParserCalls) :-
     call_parser(S, KeyName, KeyUpper, Calls),
     (
-        Calls = [Call] ->
+        Calls = [Call] -> % If we need to call something to parse the elements, call it for each element
             Call =.. [CallPred|_],
             ParserCalls = [maplist(CallPred, KeyName, KeyUpper)];
 
-        ParserCalls = []
+        ParserCalls = [] % Otherwise, the thing inside the list is already parsed, so we need no additional calls.
     ).
-call_parser(Other, _, _, []) :- % only generate parsers for structures/lists
+
+call_parser(Other, _, _, []) :- % No need to call a parser for primitives
     Other \= structure(_, _),
     not(is_list(Other)).
 
