@@ -1,0 +1,20 @@
+{
+    "result": {
+        "succeeded": true,
+        "code": 200
+    },
+
+    "people": [
+        {
+            "name": "Reed",
+            "age": 20,
+            "height": 71
+        },
+        {
+            "name": "Joe",
+            "age": 31,
+            "height": 73
+        }
+    ],
+}
+
