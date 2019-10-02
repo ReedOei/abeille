@@ -21,6 +21,16 @@ parse_result(json(Json),result(Succeeded,Code)):-member(succeeded=Succeeded,Json
 parse_people(json(Json),people(Name,Age,Height)):-member(name=Name,Json),member(age=Age,Json),member(height=Height,Json).
 ```
 
+You can also pass an optional name to use for the first generated object (instead of `top`):
+
+```
+$ cat examples/basic.json | ./abeille.pl query
+query_result(query(Result,People),Result).
+query_people(query(Result,People),People).
+
+...
+```
+
 The input JSON file:
 
 ```json
