@@ -12,7 +12,7 @@
 
 root(Root) :-
     source_file(File),
-    atom_concat(_, 'apis.pl', File),
+    atom_concat(_, 'abeille.pl', File),
     file_directory_name(File, Root).
 
 main(Argv) :-
@@ -141,4 +141,8 @@ build_structure([Key=Val|Rest], Name, structure(Name, [Key=literal(Type)|Attrs])
     not(is_list(Val)),
     type_of(Val, Type),
     build_structure(Rest, Name, structure(Name, Attrs)).
+
+build_structure([H|_], Name, listof(Structure)) :-
+    H \= (_ = _),
+    build_structure(H, Name, Structure).
 
